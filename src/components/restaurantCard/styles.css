@@ -1,0 +1,8 @@
+.card-width{
+    max-width: 540px;
+}
+
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+}
