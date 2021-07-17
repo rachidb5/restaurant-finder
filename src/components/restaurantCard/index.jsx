@@ -13,21 +13,19 @@ const Card = styled.div`
 `;
 
 
-class RestaurantCard extends React.Component {
-    render(){
-    return (
+const RestaurantCard = ({ restaurant }) => (
         <div className="container-fluid">
             <div className="row">
                 <div className="col-12 mt-3">
                     <div className="card">
                          <div className="card-horizontal">
                             <div className="img-square-wrapper card-body">
-                                <ImageCard photo={this.props.restaurantImage} />
+                                <ImageCard photo={restaurant.photos ? restaurant.photos[0].getUrl() : restaurant.icon} />
                             </div>
                             <div className="card-body">
-                                <h4 className="card-title">{ this.props.restaurantName }</h4>
-                                <p className="card-text">{ this.props.restaurantInfo }</p>
-                                <ReactStars count={5} isHalf edit={false} value={4}/>
+                                <h4 className="card-title">{ restaurant.name }</h4>
+                                <p className="card-text">{ restaurant.info }</p>
+                                <ReactStars count={5} isHalf edit={false} value={restaurant.rating}/>
                             </div>
                         </div>
                      </div>
@@ -35,21 +33,5 @@ class RestaurantCard extends React.Component {
              </div>
         </div>
     )
-       {/* <div class="card mb-3 card-width">
-            <div class="row no-gutters">
-                <div class="col-md-4">
-                    <img className="" src={ this.props.restaurantImage } alt="Imagem de capa do card" />
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">{ this.props.restaurantName}</h5>
-                        <p class="card-text">{ this.props.restaurantInfo }</p>
-                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                    </div>
-                </div>
-            </div>
-    </div>*/}
-    }
-}
 
 export default RestaurantCard;

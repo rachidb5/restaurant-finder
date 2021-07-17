@@ -7,7 +7,14 @@ import { setRestaurants, setRestaurant } from '../../redux/modules/restaurants';
 const MapContainer = (props) => {
   const dispatch = useDispatch();
   const [map, setMap] = useState(null);
+  const { restaurants } = useSelector((state) => state.restaurants);
   const { google, query, placeId } = props;
+  
+  useEffect(() => {
+    if (query) {
+      searchByQuery(map, query);
+    }
+  }, [searchByQuery, query, map])
 
   function searchByQuery(query){
       const service = new google.maps.places.PlacesService(map);
@@ -20,16 +27,9 @@ const MapContainer = (props) => {
       };
       service.textSearch(request, (results, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-          console.log('results', results);
         }
       });
-    }
-
-  useEffect(() => {
-    if (query) {
-      searchByQuery(map, query);
-    }
-  }, [searchByQuery, query, map]);
+    };
 
   const searchNearby = (map, center) => {
     const service = new google.maps.places.PlacesService(map);
@@ -43,7 +43,6 @@ const MapContainer = (props) => {
     service.nearbySearch(request, (results, status) => {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         dispatch(setRestaurants(results));
-        console.log('results', results)
       }
     });
   };
@@ -60,8 +59,19 @@ const MapContainer = (props) => {
           centerAroundCurrentLocation
           onReady={onMapReady}
           onRecenter={onMapReady}
+          zoom={15}
+          {...props}
         >
-
+           {restaurants.map((restaurant) => (
+          <Marker
+            key={restaurant.place_id}
+            name={restaurant.name}
+            position={{
+              lat: restaurant.geometry.location.lat(),
+              lng: restaurant.geometry.location.lng(),
+          }}
+        />
+      ))}
         </Map>
       );
 }

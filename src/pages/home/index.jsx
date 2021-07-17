@@ -1,5 +1,6 @@
 import logo from '../../assets/logo.svg'
 import React, { useState } from "react";
+import { useSelector } from 'react-redux'
 import TextField, { Input } from '@material/react-text-field/dist/index';
 import { Container, Search, Wrapper, Carousell } from './styled';
 import MaterialIcon from '@material/react-material-icon';
@@ -22,11 +23,11 @@ const customStyles = {
         borderRadius: "8px",
     },
   };
-
   Modal.setAppElement('#modal-root');
 
 const Home = () => {
     const [inputValue, setinputValue] = useState('')
+    const { restaurants } = useSelector((state) => state.restaurants)
     const [value, setValue] = useState('');
     const [query, setQuery] = useState(null);
     let subtitle;
@@ -84,20 +85,19 @@ const Home = () => {
                     </TextField>
                     <h1>Na Sua Área</h1>
                     <Carousell {...settings}>
-                        <ImageCard photo={image} title='Nome do Restaurante'/>
-                        <ImageCard photo={image} title='Nome do Restaurante'/>
-                        <ImageCard photo={image} title='Nome do Restaurante'/>
-                        <ImageCard photo={image} title='Nome do Restaurante'/>
-                        <ImageCard photo={image} title='Nome do Restaurante'/>
-                        <ImageCard photo={image} title='Nome do Restaurante'/>
-                        <ImageCard photo={image} title='Nome do Restaurante'/>
-                        <ImageCard photo={image} title='Nome do Restaurante'/>
+                    {restaurants.map((restaurant) => (
+                       <ImageCard key={restaurant.place_id} restaurant={restaurant} />
+                      ))}
                     </Carousell>
                     <button onClick={openModal}>Open Modal</button>
                 </Search>
-                <RestaurantCard restaurantImage={image} restaurantName='Bar do Zé'
-                restaurantInfo='Um exemplo de texto rápido para construir o título do card.' 
-                />
+                {
+                  restaurants.map((restaurant) => (
+                  <RestaurantCard
+                  restaurant={restaurant}
+                  />
+                    ))
+                  }
             </Container>
             <Modal
                 isOpen={modalIsOpen}
